@@ -1,6 +1,6 @@
 # ═══════════════════════════════════════════════════════════════
 #                    TrendRadar 配置文件 (零费用二开全量版)
-#                       Version: 2.2.0
+#                       Version: 2.2.0 (完美合体版)
 # ═══════════════════════════════════════════════════════════════
 
 # ===============================================================
@@ -207,6 +207,15 @@ report:
   display_mode: "platform"            # 按来源进行基础聚合
   rank_threshold: 5
   max_news_per_keyword: 0
+
+filter:
+  method: "ai"                        # 强制开启 AI 智能初筛，让机器人去读取你的 ai_interests.txt
+  priority_sort_enabled: true         # 严格按照定义的 1、2、3 顺序进行排序
+
+ai_filter:
+  batch_size: 200                     # 每批次发送给 AI 的标题上限
+  batch_interval: 2                   # 避免限流的等待间隔
+  min_score: 0.5                      # 适当放宽初筛标准，留足素材给后续爆款洗稿
 
 display:
   region_order:
