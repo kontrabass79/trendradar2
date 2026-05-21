@@ -11,7 +11,8 @@ app:
   show_version_update: false          # 关闭版本提示
 
 schedule:
-  enabled: false                      # 由 GitHub Actions 的 cron 定时触发，无需内置调度
+  enabled: true                       # 【如果想用内置时间线，可将其设为 true】
+  preset: "custom"                    # 【强制指定】告诉机器人去执行上面为您改好的自媒体爆款生产线日程
 
 # ===============================================================
 # 2. 数据源 - 热榜平台 (关闭国内热榜，专注您的技术和网赚流)
