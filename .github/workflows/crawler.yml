@@ -2,17 +2,17 @@ name: Get Hot News
 
 on:
   schedule:
-    # 定时任务：北京时间每天清晨 07:33 全自动唤醒运行（UTC 时间 23:33）
+    # 每天北京时间清晨 07:33 全自动唤醒运行（对应 UTC 时间 23:33）
     - cron: "33 23 * * *"
 
-  workflow_dispatch: # 允许您在网页端随时手动点击按钮测试
+  workflow_dispatch: # 允许在 GitHub 网页端随时手动点击按钮发射测试
 
 concurrency:
   group: crawler-${{ github.ref_name }}
   cancel-in-progress: true
 
 permissions:
-  contents: write    # 提升至写权限，确保生成的 index.html 能无缝提交到 Pages 节点
+  contents: write    # 赋予写权限，确保生成的 index.html 网页文件能成功提交并刷新 Pages
   actions: write
 
 jobs:
@@ -28,19 +28,15 @@ jobs:
           clean: true
 
       - name: Bypass Expiration Check
+        # 强行粉碎 7 天限制逻辑，实现无限期全自动运行，不需要任何签到续期
         run: |
           echo "✅ 永久使用版本已激活，免签到机制启动。"
-          echo "✅ Self-hosted Mode: Expiration check bypassed."
 
       - name: Set up Python
         if: success()
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-
-      - name: Install uv
-        if: success()
-        uses: actions/setup-python@v6 # 维持底层标准打包环境
 
       - name: Install dependencies
         if: success()
@@ -57,7 +53,7 @@ jobs:
       - name: Run crawler
         if: success()
         env:
-          # 核心大图景：在这一步，把 GitHub Settings 里的钥匙死死塞进原项目指定的系统变量中
+          # 核心大合体：读取你的 GitHub Settings Secrets 里的密钥，完美契合硅基流动大模型
           AI_API_KEY: ${{ secrets.AI_API_KEY }}
           AI_MODEL: "openai/Qwen/Qwen2.5-72B-Instruct"
           AI_API_BASE: "https://api.siliconflow.cn/v1"
