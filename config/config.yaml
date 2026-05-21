@@ -248,14 +248,15 @@ storage:
     html: true                        # 邮件和页面生成需要 HTML 支持
 
 # ===============================================================
-# 8. AI 模型配置 (利用内置 LiteLLM 框架，完美兼容硅基流动免费节点)
+# 8. AI 模型配置 
 # ===============================================================
 ai:
-  model: "openai/Qwen/Qwen2.5-72B-Instruct" # 强制指定硅基流动的大型开源爆款创作模型
-  api_key: ""                         # 留空，我们在 GitHub Secrets 中配置统一的变量 AI_API_KEY
-  api_base: "https://api.siliconflow.cn/v1" # 硅基流动端点
+  # 重点：修改为前缀对应。告诉系统我们要用硅基流动的千问模型
+  model: "siliconflow/Qwen/Qwen2.5-72B-Instruct" 
+  api_key: ""                         # 保持留空，系统会自动去 GitHub 读刚才改好的密钥
+  api_base: "https://api.siliconflow.cn/v1"
   timeout: 120
-  temperature: 1.0                    # 头条风需要高发散度、高爆款度
+  temperature: 1.0
   max_tokens: 5000
 
 # ===============================================================
