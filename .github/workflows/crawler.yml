@@ -1,71 +1,60 @@
 name: Get Hot News
-
 on:
   schedule:
     - cron: "33 23 * * *"
-
   workflow_dispatch:
-
 concurrency:
   group: crawler-${{ github.ref_name }}
   cancel-in-progress: true
-
 permissions:
   contents: write    
   actions: write
-
 jobs:
   crawl:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
-        with:
-          fetch-depth: 1
-          clean: true
-
-      - name: Bypass Expiration Check
-        run: |
-          echo "✅ 永久使用版本已激活，免签到机制启动。"
-
       - name: Set up Python
-        if: success()
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-
       - name: Install uv
-        if: success()
         uses: astral-sh/setup-uv@v5
-
       - name: Install dependencies
-        if: success()
         run: uv sync --frozen --no-dev
-
-      - name: Verify required files
-        if: success()
-        run: |
-          if [ ! -f config/config.yaml ]; then
-            echo "Error: Config missing"
-            exit 1
-          fi
-
       - name: Run crawler
-        if: success()
         env:
           AI_API_KEY: ${{ secrets.AI_API_KEY }}
           AI_MODEL: "openai/deepseek-ai/DeepSeek-V3" 
           AI_API_BASE: "https://api.siliconflow.cn/v1"
           GITHUB_ACTIONS: true
         run: uv run python -m trendradar 
-
-      - name: Commit and Push changes
-        if: success()
+      - name: HTML Magic Override
+        run: |
+          uv run python -c "
+          import json, os, re
+          # 自动寻找最近生成的 JSON 文件
+          files = [os.path.join('output/ai_analysis', f) for f in os.listdir('output/ai_analysis') if f.endswith('.json')]
+          if files:
+              latest = max(files, key=os.path.getctime)
+              with open(latest, 'r', encoding='utf-8') as f:
+                  data = json.load(f)
+              blog_html = f\"<div style='background:#fdfaf3; padding:20px; border:2px dashed #c8bca2; margin-bottom:20px;'><h3>📜 每日情报简报</h3>\"
+              for key in ['core_trends', 'sentiment_controversy', 'signals']:
+                  blog_html += f'<div>{data.get(key, \"\").replace(\"\\\\n\", \"<br>\")}</div><hr>'
+              blog_html += '</div>'
+              with open('index.html', 'r', encoding='utf-8') as f:
+                  html = f.read()
+              new_html = html.replace('<div class=\"content\">', '<div class=\"content\">' + blog_html)
+              with open('index.html', 'w', encoding='utf-8') as f:
+                  f.write(new_html)
+          "
+      - name: Commit and Push
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add index.html
-          git commit -m "Auto update trendradar HTML" || echo "No changes to commit"
+          git add index.html || true
+          git commit -m "Update Hot News" || echo "No changes"
           git push
