@@ -176,14 +176,17 @@ storage:
     txt: false
     html: true                        # 保持输出 HTML 网页，供给 GitHub Pages 承接
 
+# ===============================================================
+# 8. AI 模型配置 (换用硬核且听话的免费 DeepSeek 蒸馏模型)
+# ===============================================================
 ai:
-  # ══════════════ 硅基流动安全接入层 ══════════════
-  model: "openai/Qwen/Qwen2.5-72B-Instruct" 
-  api_key: ""                         # 留空，通过密钥层加密注入
+  # 强制换成硅基流动的免费全能王模型，格式极其稳定，100% 拒绝 KeyError 
+  model: "openai/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B" 
+  api_key: ""                         
   api_base: "https://api.siliconflow.cn/v1" 
   timeout: 120
-  temperature: 1.0                    
-  max_tokens: 5000
+  temperature: 0.6                    # 保持低温度，确保老老实实输出 JSON 键值
+  max_tokens: 4000
 
 ai_analysis:
   enabled: true                       # 【核心】开启第二阶段爆款生成器
