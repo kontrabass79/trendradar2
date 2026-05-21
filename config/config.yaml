@@ -188,15 +188,14 @@ ai:
   max_tokens: 4000
   response_format: { "type": "json_object" } # 强制模型原生以标准 JSON 字典交互
 
+
 ai_analysis:
-  enabled: true                       
+  enabled: true                       # 必须为 true
   language: "Chinese"
   prompt_file: "ai_analysis_prompt.txt" 
-  mode: "daily"
-  max_news_for_analysis: 250          
-  include_rss: true                   
-  include_standalone: false
-  include_rank_timeline: false
+  mode: "daily"                       # 建议设为 daily
+  include_rss: true                   # 必须为 true，否则 AI 看不到你的 40+ 个 RSS 内容
+  save_raw_data: true                 # 必须为 true，配合我们的拦截脚本使用
 
 advanced:
   debug: false
