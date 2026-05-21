@@ -1,6 +1,6 @@
 # ═══════════════════════════════════════════════════════════════
 #                    TrendRadar 系统核心配置文件
-#                       Version: 2.2.0 (自媒体看板定制版)
+#                       Version: 2.4.0 (DeepSeek 完美对齐版)
 # ═══════════════════════════════════════════════════════════════
 
 app:
@@ -11,7 +11,7 @@ schedule:
   enabled: false                      # 关闭原项目的自动化调度，改由 GitHub Actions 强行控制
 
 platforms:
-  enabled: false                      # 彻底关闭国内热榜（微博/知乎等），精简算力聚焦 RSS 独立搞钱流
+  enabled: false                      # 关闭国内热榜（微博/知乎等），精简算力聚焦 RSS 独立搞钱流
 
 rss:
   enabled: true                       # 【开启】RSS 核心数据抓取
@@ -19,7 +19,7 @@ rss:
     enabled: true                     
     max_age_days: 1                   # 严格限制：只抓取过去 24 小时内的最新资讯
 
-  # ═══════════ 以下为你发给我的 40+ 个核心自媒体情报源 ═══════════
+  # ═══════════ 以下为您发给我的 40+ 个核心自媒体情报源 ═══════════
   feeds:
     - id: "linux_do_latest"
       name: "LinuxDo 最新热帖"
@@ -147,18 +147,18 @@ report:
   display_mode: "platform"            
 
 filter:
-  method: "ai"                        # 【核心控制】开启第一阶段 AI 智能过滤
+  method: "ai"                        # 开启第一阶段 AI 智能过滤
   priority_sort_enabled: true         
 
 ai_filter:
   batch_size: 200                     
   batch_interval: 2                   
-  min_score: 0.5                      # 分数低于 0.5 的杂质新闻直接过滤掉
+  min_score: 0.5                      
 
 display:
   region_order:
     - ai_analysis                     # 强行让大模型洗出的 3 篇复古羊皮纸博客排在最顶部
-    - rss                             # 原始 RSS 数据排在下面作为底稿参考
+    - rss                             
   regions:
     hotlist: false
     new_items: false
@@ -167,34 +167,32 @@ display:
     ai_analysis: true                 
 
 notification:
-  enabled: false                      # 彻底关闭推送渠道，只在网页端展示，防骚扰且省钱
+  enabled: false                      # 关闭不必要的外部推送通知
 
 storage:
   backend: "local"                    
   formats:
     sqlite: true
     txt: false
-    html: true                        # 保持输出 HTML 网页，供给 GitHub Pages 承接
+    html: true                        
 
-# ===============================================================
-# 8. AI 模型配置 (换用硬核且听话的免费 DeepSeek 蒸馏模型)
-# ===============================================================
 ai:
-  # 强制换成硅基流动的免费全能王模型，格式极其稳定，100% 拒绝 KeyError 
-  model: "openai/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B" 
-  api_key: ""                         
+  # ══════════════ 接入层：免费且格式极稳的 DeepSeek-V3 ══════════════
+  model: "openai/deepseek-ai/DeepSeek-V3" 
+  api_key: ""                         # 留空，GitHub Actions 脚本会自动注入
   api_base: "https://api.siliconflow.cn/v1" 
   timeout: 120
-  temperature: 0.6                    # 保持低温度，确保老老实实输出 JSON 键值
+  temperature: 0.5                    # 降低温度，死死锁住 JSON 格式，绝不吐飞
   max_tokens: 4000
+  response_format: { "type": "json_object" } # 强制模型原生以标准 JSON 字典交互
 
 ai_analysis:
-  enabled: true                       # 【核心】开启第二阶段爆款生成器
+  enabled: true                       
   language: "Chinese"
-  prompt_file: "ai_analysis_prompt.txt" # 绑定你的头条双标题文案灵魂提示词
+  prompt_file: "ai_analysis_prompt.txt" 
   mode: "daily"
   max_news_for_analysis: 250          
-  include_rss: true                   # 必须设为 true，让 AI 全力提取分析你上述的 40+ 个 RSS 流数据
+  include_rss: true                   
   include_standalone: false
   include_rank_timeline: false
 
