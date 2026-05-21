@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write    # 赋予写权限，确保生成的 index.html 网页文件能成功提交并刷新 Pages
+  contents: write    
   actions: write
 
 jobs:
@@ -28,7 +28,6 @@ jobs:
           clean: true
 
       - name: Bypass Expiration Check
-        # 强行粉碎 7 天限制逻辑，实现无限期全自动运行，不需要任何签到续期
         run: |
           echo "✅ 永久使用版本已激活，免签到机制启动。"
 
@@ -38,9 +37,13 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install uv
+        if: success()
+        uses: astral-sh/setup-uv@v5 # 恢复原生的 uv 包管理器安装环境
+
       - name: Install dependencies
         if: success()
-        run: pip install requests feedparser pyyaml litellm
+        run: uv sync --frozen --no-dev # 一键自动安装项目所需的所有依赖（包括 pytz）
 
       - name: Verify required files
         if: success()
@@ -53,9 +56,10 @@ jobs:
       - name: Run crawler
         if: success()
         env:
-          # 核心大合体：读取你的 GitHub Settings Secrets 里的密钥，完美契合硅基流动大模型
+          # 核心大合体：读取你的 GitHub Settings Secrets 里的密钥
           AI_API_KEY: ${{ secrets.AI_API_KEY }}
-          AI_MODEL: "openai/Qwen/Qwen2.5-72B-Instruct"
+          AI_MODEL: "openai/deepseek-ai/DeepSeek-V3" # 之前我们在 config 换了，这里也保持对齐
           AI_API_BASE: "https://api.siliconflow.cn/v1"
           GITHUB_ACTIONS: true
-        run: python -m trendradar
+        # 必须使用 uv run 来调用环境里的依赖
+        run: uv run python -m trendradar
