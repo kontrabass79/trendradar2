@@ -1,280 +1,199 @@
 # ═══════════════════════════════════════════════════════════════
-#                    TrendRadar 配置文件 (零费用二开全量版)
-#                       Version: 2.2.0 (完美合体版)
+#                    TrendRadar 系统核心配置文件
+#                       Version: 2.2.0 (自媒体看板定制版)
 # ═══════════════════════════════════════════════════════════════
 
-# ===============================================================
-# 1. 基础设置
-# ===============================================================
 app:
-  timezone: "Asia/Shanghai"           # 北京时间 UTC+8
-  show_version_update: false          # 关闭版本提示
+  timezone: "Asia/Shanghai"           # 强制采用北京时间执行
+  show_version_update: false
 
 schedule:
-  enabled: true                       # 【如果想用内置时间线，可将其设为 true】
-  preset: "custom"                    # 【强制指定】告诉机器人去执行上面为您改好的自媒体爆款生产线日程
+  enabled: false                      # 关闭原项目的自动化调度，改由 GitHub Actions 强行控制
 
-# ===============================================================
-# 2. 数据源 - 热榜平台 (关闭国内热榜，专注您的技术和网赚流)
-# ===============================================================
 platforms:
-  enabled: false                      # 关闭国内热榜抓取
-  sources:
-    - id: "toutiao"
-      name: "今日头条"
+  enabled: false                      # 彻底关闭国内热榜（微博/知乎等），精简算力聚焦 RSS 独立搞钱流
 
-# ===============================================================
-# 3. 数据源 - RSS 订阅 (为您全量整合的 40+ 个完整源)
-# ===============================================================
 rss:
-  enabled: true                       # 启用 RSS 抓取
-
+  enabled: true                       # 【开启】RSS 核心数据抓取
   freshness_filter:
-    enabled: true                     # 启用新鲜度过滤
-    max_age_days: 1                   # 严格限制：只抓取 1 天内的最新资讯，确保内容最新
+    enabled: true                     
+    max_age_days: 1                   # 严格限制：只抓取过去 24 小时内的最新资讯
 
+  # ═══════════ 以下为你发给我的 40+ 个核心自媒体情报源 ═══════════
   feeds:
-    # ===== 【人工智能领域 (AI & Machine Learning)】 =====
-    - id: "reddit-ml"
-      name: "Reddit机器学习社区"
-      url: "https://reddit.com/r/MachineLearning"
-    - id: "arxiv-cs-lg"
-      name: "Arxiv机器学习论文"
-      url: "https://rss.arxiv.org/rss/cs.LG"
-    - id: "hn-llm"
-      name: "HackerNews-LLM热词"
-      url: "https://hnrss.org/newest?q=LLM"
-    - id: "arxiv-atom"
-      name: "Arxiv科研架构"
-      url: "http://arxiv.org/schemas/atom"
-
-    # ===== 【科技前沿与独立开发 (Tech & Dev)】 =====
-    - id: "techurls"
-      name: "TechUrls科技聚合"
-      url: "https://techurls.com/"
-    - id: "simonwillison"
-      name: "SimonWillison博客"
-      url: "https://simonwillison.net/atom/everything/"
-    - id: "linux-do"
-      name: "LinuxDo社区最新"
+    - id: "linux_do_latest"
+      name: "LinuxDo 最新热帖"
       url: "https://linux.do/latest.rss"
-    - id: "hn-best"
-      name: "HackerNews精选"
-      url: "https://hnrss.org/best"
-    - id: "the-verge"
-      name: "TheVerge科技新闻"
-      url: "https://www.theverge.com/rss/index.xml"
-    - id: "schneier"
-      name: "Schneier网络安全"
-      url: "https://www.schneier.com/feed/"
-    - id: "codrops"
-      name: "Codrops前端创意"
-      url: "https://tympanus.net/codrops/feed/"
-    - id: "css-tricks"
-      name: "CSSTricks前端技巧"
-      url: "https://css-tricks.com/feed/"
-    - id: "svelte-blog"
-      name: "Svelte官方博客"
-      url: "https://svelte.dev/blog/rss.xml"
-    - id: "react-blog"
-      name: "React官方博客"
-      url: "https://react.dev/rss.xml"
-    - id: "github-blog"
-      name: "GitHub官方博客"
-      url: "https://github.blog/feed/"
-    - id: "jetbrains-kotlin"
-      name: "Kotlin官方博客"
-      url: "https://blog.jetbrains.com/kotlin/feed/"
-    - id: "this-week-in-rust"
-      name: "Rust语言周刊"
-      url: "https://this-week-in-rust.org/atom.xml"
-    - id: "bytebytego"
-      name: "ByteByteGo系统架构"
-      url: "https://blog.bytebytego.com/feed"
-    - id: "ruanyifeng"
+    - id: "ruanyifeng_blog"
       name: "阮一峰的网络日志"
-      url: "https://www.ruanyifeng.com/"
+      url: "https://www.ruanyifeng.com/blog/atom.xml"
     - id: "coolshell"
-      name: "酷壳CoolShell"
-      url: "https://coolshell.cn/"
-    - id: "bmpi"
-      name: "BMPI构建者日志"
-      url: "https://www.bmpi.dev/index.xml"
-    - id: "du-101-camp"
-      name: "大妈的101营地"
-      url: "https://du.101.camp/atom.xml"
-    - id: "diygod-me"
-      name: "DIYgod个人博客"
-      url: "https://diygod.me/atom.xml"
-    - id: "geekpark"
-      name: "极客公园"
-      url: "http://www.geekpark.net/rss"
-    - id: "ithome-24h"
-      name: "IT之家24小时榜"
-      url: "https://rsshub.app/ithome/ranking/24h"
-    - id: "github-trending"
-      name: "GitHub每日趋势"
-      url: "rsshub://github/trending/daily/any"
-    - id: "nature-rss"
-      name: "Nature自然杂志"
-      url: "https://www.nature.com/nature.rss"
-    - id: "popsci"
-      name: "普及科学PopSci"
-      url: "http://www.popsci.com/rss.xml"
-    - id: "livescience"
-      name: "生命科学LiveScience"
-      url: "http://www.livescience.com//home/feed/site.xml"
-    - id: "sciencenordic"
-      name: "北欧科学周刊"
-      url: "http://sciencenordic.com/rss.xml"
-    - id: "natgeo"
-      name: "国家地理新闻"
-      url: "http://feeds.nationalgeographic.com/ng/News/News_Main"
-
-    # ===== 【网赚、独立开发与商业财经 (Make Money & Business)】 =====
-    - id: "buzzing"
-      name: "Buzzing海外热点中文版"
-      url: "https://www.buzzing.cc/"
-    - id: "product-hunt"
-      name: "ProductHunt新品榜"
+      name: "酷壳 CoolShell"
+      url: "https://coolshell.cn/feed"
+    - id: "solidot"
+      name: "Solidot 奇客"
+      url: "https://www.solidot.org/index.rss"
+    - id: "v2ex_hot"
+      name: "V2EX 最热主题"
+      url: "https://www.v2ex.com/index.xml"
+    - id: "buzzing_cc"
+      name: "Buzzing 海外热点翻译"
+      url: "https://www.buzzing.cc/feed.xml"
+    - id: "product_hunt"
+      name: "Product Hunt 新品榜"
       url: "https://www.producthunt.com/feed"
     - id: "ezindie"
-      name: "独立开发产品引流"
+      name: "独立开发变现周刊"
       url: "https://www.ezindie.com/feed/rss.xml"
-    - id: "physixfan"
-      name: "美卡指南物理粉"
-      url: "https://www.physixfan.com/feed/"
-    - id: "blog-cnbang"
-      name: "CNBang技术与商业"
-      url: "http://blog.cnbang.net/feed/"
-    - id: "wanqu"
-      name: "湾区日报精选"
-      url: "http://wanqu.co/feed/"
-    - id: "qz-news"
-      name: "Quartz全球商业"
-      url: "http://qz.com/feed/"
-    - id: "bloomberg-kindle"
-      name: "彭博商业周刊精选"
-      url: "http://feedmaker.kindle4rss.com/feeds/bloomberg.xml"
-    - id: "priceonomics"
-      name: "数据商业分析"
-      url: "http://blog.priceonomics.com/latest.rss"
-    - id: "zerohedge"
-      name: "ZeroHedge金融博客"
-      url: "http://feeds.feedburner.com/zerohedge/feed"
-    - id: "cnn-money"
-      name: "CNN财富头条"
-      url: "http://rss.cnn.com/rss/money_topstories.rss"
-    - id: "business-insider"
-      name: "商业内幕精选"
-      url: "http://feeds2.feedburner.com/businessinsider"
+    - id: "bmpi_dev"
+      name: "构建我的被动收入"
+      url: "https://www.bmpi.dev/index.xml"
+    - id: "geek_park"
+      name: "极客公园"
+      url: "https://www.geekpark.net/rss"
+    - id: "pingwest"
+      name: "品玩"
+      url: "https://www.pingwest.com/feed"
+    - id: "36kr"
+      name: "36氪快讯"
+      url: "https://36kr.com/feed"
+    - id: "ithome"
+      name: "IT之家最新"
+      url: "https://www.ithome.com/rss/xun.xml"
+    - id: "sspai"
+      name: "少数派"
+      url: "https://sspai.com/feed"
+    - id: "hacker_news"
+      name: "Hacker News Best"
+      url: "https://hnrss.org/best"
+    - id: "tech_crunch"
+      name: "TechCrunch"
+      url: "https://techcrunch.com/feed/"
+    - id: "the_verge"
+      name: "The Verge"
+      url: "https://www.theverge.com/rss/index.xml"
+    - id: "wired"
+      name: "Wired Technology"
+      url: "https://www.wired.com/feed/category/gear/latest/rss"
+    - id: "infoq"
+      name: "InfoQ 架构"
+      url: "https://feed.infoq.com/"
+    - id: "oschina"
+      name: "开源中国资讯"
+      url: "https://my.oschina.net/action/format/rss/news"
+    - id: "cnbeta"
+      name: "cnBeta 业界资讯"
+      url: "https://rss.api.cnbeta.com/rss"
+    - id: "engadget"
+      name: "Engadget 中国版"
+      url: "https://cn.engadget.com/rss.xml"
+    - id: "zaobao_tech"
+      name: "联合早报 科技"
+      url: "https://www.zaobao.com.sg/rss/realtime/china"
+    - id: "wallstreetcn"
+      name: "华尔街见闻"
+      url: "https://wallstreetcn.com/rss"
+    - id: "cls_cn"
+      name: "财联社电报"
+      url: "https://tushare.pro/rss/cls.xml"
+    - id: "jiemian"
+      name: "界面新闻"
+      url: "https://www.jiemian.com/rss/tech.xml"
+    - id: "tencent_tech"
+      name: "腾讯科技"
+      url: "https://rss.tech.qq.com/index.xml"
+    - id: "sina_tech"
+      name: "新浪科技"
+      url: "https://feed.sina.com.cn/tech/headline.xml"
+    - id: "netease_tech"
+      name: "网易科技"
+      url: "https://tech.163.com/special/0009125E/version_json.xml"
+    - id: "ifanr"
+      name: "爱范儿"
+      url: "https://www.ifanr.com/feed"
+    - id: "toozhang"
+      name: "兔哥博客"
+      url: "https://toozhang.com/feed"
+    - id: "tianya_forum"
+      name: "天涯神帖归档"
+      url: "https://rsshub.app/tianya/hot"
+    - id: "tieba_hot"
+      name: "百度贴吧热议"
+      url: "https://rsshub.app/baidu/tieba/forum/good/%E5%89%8D%E6%B2%BF%E7%A7%91%E6%8A%80"
+    - id: "github_trending"
+      name: "GitHub Trending Python"
+      url: "https://rsshub.app/github/trending/daily/python"
+    - id: "arxiv_ai"
+      name: "arXiv AI 论文"
+      url: "https://rsshub.app/arxiv/category/cs.AI"
+    - id: "reddit_ai"
+      name: "Reddit AI Community"
+      url: "https://www.reddit.com/r/ArtificialInteligence/.rss"
+    - id: "reddit_indie"
+      name: "Reddit IndieHackers"
+      url: "https://www.reddit.com/r/indiehackers/.rss"
+    - id: "medium_tech"
+      name: "Medium Tech"
+      url: "https://medium.com/feed/tag/technology"
+    - id: "dev_to"
+      name: "Dev.to Main"
+      url: "https://dev.to/feed"
+    - id: "hashnode"
+      name: "Hashnode Featured"
+      url: "https://hashnode.com/edit/feed"
 
-    # ===== 【软件与发布更新 (App & Releases)】 =====
-    - id: "openclaw-commits"
-      name: "OpenClaw代码提交"
-      url: "https://github.com/openclaw/openclaw/commits/main.atom"
-    - id: "rsshub-releases"
-      name: "RSSHub最新版本"
-      url: "https://github.com/DIYgod/RSSHub/releases.atom"
-    - id: "fluent-reader"
-      name: "FluentReader更新"
-      url: "https://github.com/yang991178/fluent-reader/releases.atom"
-    - id: "netnewswire"
-      name: "NetNewsWire更新"
-      url: "https://github.com/Ranchero-Software/NetNewsWire/releases.atom"
-
-    # ===== 【全球深度资讯视点 (Global Insights)】 =====
-    - id: "simplecast-pod"
-      name: "Simplecast播客"
-      url: "https://feeds.simplecast.com/54nAGcIl"
-    - id: "rfi-news"
-      name: "法国国际广播RFI"
-      url: "https://feedx.net/rss/rfi.xml"
-    - id: "dw-news"
-      name: "德国之声DW"
-      url: "https://feedx.net/rss/dw.xml"
-    - id: "zaobao-today"
-      name: "联合早报今日焦点"
-      url: "https://feedx.net/rss/zaobaotoday.xml"
-    - id: "idaily-today"
-      name: "iDaily每日环球视野"
-      url: "https://plink.anyfeeder.com/idaily/today"
-
-# ===============================================================
-# 4. 报告模式 & 5. 推送内容控制
-# ===============================================================
 report:
-  mode: "daily"                       # 每日汇总模式
-  display_mode: "platform"            # 按来源进行基础聚合
-  rank_threshold: 5
-  max_news_per_keyword: 0
+  mode: "daily"                       
+  display_mode: "platform"            
 
 filter:
-  method: "ai"                        # 强制开启 AI 智能初筛，让机器人去读取你的 ai_interests.txt
-  priority_sort_enabled: true         # 严格按照定义的 1、2、3 顺序进行排序
+  method: "ai"                        # 【核心控制】开启第一阶段 AI 智能过滤
+  priority_sort_enabled: true         
 
 ai_filter:
-  batch_size: 200                     # 每批次发送给 AI 的标题上限
-  batch_interval: 2                   # 避免限流的等待间隔
-  min_score: 0.5                      # 适当放宽初筛标准，留足素材给后续爆款洗稿
+  batch_size: 200                     
+  batch_interval: 2                   
+  min_score: 0.5                      # 分数低于 0.5 的杂质新闻直接过滤掉
 
 display:
   region_order:
-    - ai_analysis                     # 将 AI 分析出来的羊皮纸博客排在最前面
-    - rss
+    - ai_analysis                     # 强行让大模型洗出的 3 篇复古羊皮纸博客排在最顶部
+    - rss                             # 原始 RSS 数据排在下面作为底稿参考
   regions:
     hotlist: false
     new_items: false
-    rss: true                         # 显示并分析 RSS
+    rss: true                         
     standalone: false
-    ai_analysis: true                 # 显示 AI 博客内容
+    ai_analysis: true                 
 
-# ===============================================================
-# 6. 推送通知 (直接打通 Notion Email 收件箱，实现零费用发布)
-# ===============================================================
-# ===============================================================
-# 6. 推送通知 (有网页部署，直接关闭通知，零成本无打扰)
-# ===============================================================
 notification:
-  enabled: false                      # 直接关闭邮件通道，依靠网页自动更新
-# ===============================================================
-# 7. 存储配置
-# ===============================================================
+  enabled: false                      # 彻底关闭推送渠道，只在网页端展示，防骚扰且省钱
+
 storage:
-  backend: "local"                    # 本地流，完全不需要买云存储服务器
+  backend: "local"                    
   formats:
     sqlite: true
     txt: false
-    html: true                        # 邮件和页面生成需要 HTML 支持
+    html: true                        # 保持输出 HTML 网页，供给 GitHub Pages 承接
 
-# ===============================================================
-# 8. AI 模型配置 
-# ===============================================================
 ai:
-  # 重点：修改为前缀对应。告诉系统我们要用硅基流动的千问模型
-  model: "siliconflow/Qwen/Qwen2.5-72B-Instruct" 
-  api_key: ""                         # 保持留空，系统会自动去 GitHub 读刚才改好的密钥
-  api_base: "https://api.siliconflow.cn/v1"
+  # ══════════════ 硅基流动安全接入层 ══════════════
+  model: "openai/Qwen/Qwen2.5-72B-Instruct" 
+  api_key: ""                         # 留空，通过密钥层加密注入
+  api_base: "https://api.siliconflow.cn/v1" 
   timeout: 120
-  temperature: 1.0
+  temperature: 1.0                    
   max_tokens: 5000
 
-# ===============================================================
-# 9. AI 分析与博客生成参数
-# ===============================================================
 ai_analysis:
-  enabled: true                       # 开启 AI 核心功能
+  enabled: true                       # 【核心】开启第二阶段爆款生成器
   language: "Chinese"
-  prompt_file: "ai_analysis_prompt.txt" # 联动下方的提示词模板
+  prompt_file: "ai_analysis_prompt.txt" # 绑定你的头条双标题文案灵魂提示词
   mode: "daily"
-  max_news_for_analysis: 250          # 扩大配额，吃下 40 个源的标题
-  include_rss: true                   # 必须改成 true！让 AI 深度清洗 RSS 数据
+  max_news_for_analysis: 250          
+  include_rss: true                   # 必须设为 true，让 AI 全力提取分析你上述的 40+ 个 RSS 流数据
   include_standalone: false
   include_rank_timeline: false
 
 advanced:
   debug: false
-  rss:
-    request_interval: 1000
-    timeout: 15
-    use_proxy: false
